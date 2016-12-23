@@ -7,8 +7,6 @@ import android.util.Log;
 import com.sattva.signalproc.AlgorithmMain;
 
 import java.math.BigInteger;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 /**
  * Created by Vibhav on 16/11/16.
@@ -32,10 +30,6 @@ public class ConvertIntentService extends IntentService {
     int input_array_counter;
     int absolute_sample_diff = 0;
 
-    Calendar c = Calendar.getInstance();
-    SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-HH-mm-ss");
-    String strDate = sdf.format(c.getTime());
-    String fileName = "input-array-" +  strDate;
 
 
 
@@ -45,7 +39,7 @@ public class ConvertIntentService extends IntentService {
 
     {
 
-        Log.e("ConvertIntentService", "entered ConvertIntent at: " + (System.currentTimeMillis() - ApplicationUtils.startMS));
+        //Log.e("ConvertIntentService", "entered ConvertIntent at: " + (System.currentTimeMillis() - ApplicationUtils.startMS));
 
         populate_input_array();
 
@@ -55,19 +49,25 @@ public class ConvertIntentService extends IntentService {
 
         //Object[] Final = Algo.AlgoStart(ApplicationUtils.input_array);
 
+        //Log.e("ConvertIntentService", "input to algo is: " + "array length = " + ApplicationUtils.test_input_array.length + ", " + ApplicationUtils.test_input_array[0][1] + ", " + ApplicationUtils.test_input_array[14999][3]);
         Object[] Final = Algo.AlgoStart(ApplicationUtils.test_input_array);//this is for testing entire app. the one above to be used in production.
+
+        //Log.e("ConvertIntentService", "After algo run: " + "array length = " + ApplicationUtils.test_input_array.length + ", " + ApplicationUtils.test_input_array[0][1] + ", " + ApplicationUtils.test_input_array[14999][3]);
+
         Log.e("SocketIntentService", "Algo completed at: " + (System.currentTimeMillis() - ApplicationUtils.startMS));
 
-        int[] MQRS = (int[]) Final[0];
-        int[] FQRS = (int[]) Final[1];
-
-        Log.e("ConvertIntentService", "MQRS[0]: " + MQRS[0]);
-        Log.e("ConvertIntentService", "FQRS[0: " + FQRS[0]);
+        ApplicationUtils.MQRS = (int[]) Final[0];
+        ApplicationUtils.FQRS = (int[]) Final[1];
 
         ApplicationUtils.convert_flag = 1;
 
+        start_plotting();
+
+        stopSelf();
 
     }
+
+
 
 
     public void populate_input_array()
@@ -91,7 +91,6 @@ public class ConvertIntentService extends IntentService {
             absolute_sample_diff = end_index - start_index;
 
 
-            //(temp_test.length())!=25 || (absolute_sample_diff != 1) || (absolute_sample_diff != -9)
             if(!((temp_test.length() == 25) && ((absolute_sample_diff == 1) || (absolute_sample_diff ==-9))))
             {
 
@@ -166,6 +165,18 @@ public class ConvertIntentService extends IntentService {
     public double stringToDouble(String input)
     {
         return double_conv_double(new BigInteger(input,16).doubleValue());
+    }
+
+
+    public void start_plotting()
+    {
+
+        if(ApplicationUtils.plot_flag == 1)
+        {
+            Intent plottingIntent = new Intent(ConvertIntentService.this, PlottingIntentService.class);
+            startService(plottingIntent);
+        }
+
     }
 
 }

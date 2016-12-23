@@ -1,5 +1,7 @@
 package com.sattva.signalproc;
 
+import android.util.Log;
+
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -199,7 +201,7 @@ public class qrsFSelectionQueue
 			}
 		}
 		
-		
+		Log.e("qrsFSelectionQueu", "StartIndex = " + StartIndex + ", ch = " + ch);
 		/**
 		 * Final Selection of QRS
 		 */
@@ -530,6 +532,8 @@ public class qrsFSelectionQueue
 						RRdiff0 = 0;
 						for (int j = 1; j<= count; j++)
 						{
+
+							Log.e("qrsFSelectionQueu", "j = " + j + ", " + "QRSFlength = " + QRSFinal.size());
 							RRdiff0 = RRdiff0 + (QRSFinal.get(j)- QRSFinal.get(j-1));
 						}
 						RRdiff0 = RRdiff0/count;

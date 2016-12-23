@@ -45,7 +45,6 @@ public class SocketIntentService extends IntentService {
     }
 
 
-
     class ServerThread implements Runnable
     {
 
@@ -116,6 +115,7 @@ public class SocketIntentService extends IntentService {
 
                     tempInput = input.readLine();
                     LogData(tempInput);
+                    //.e("SocketIntentService", tempInput);
                     tempString = tempInput.split("\\+");
 
 

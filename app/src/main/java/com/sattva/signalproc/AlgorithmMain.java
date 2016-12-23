@@ -79,6 +79,8 @@ public class AlgorithmMain
         System.out.println((stopTime6 - stopTime5 )+" milliseconds for Jade2 execution");
         System.out.println((stopTime7 - stopTime6 )+" milliseconds for FQRS execution");
         System.out.println(stopTime7 - startTime+" milliseconds for total execution");
-		return new Object[]{qrsM,qrsF}; 
+
+
+		return new Object[]{qrsM,qrsF};
 	}
 }
